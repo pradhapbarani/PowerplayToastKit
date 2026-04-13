@@ -2,7 +2,7 @@
 //  DefaultToastView.swift
 //  PowerplayToastKit
 //
-//  Created by Mithilesh Parmar on 18/10/21.
+//  Created by Barani Elangovan on 13/04/26.
 //
 
 import UIKit
@@ -28,6 +28,14 @@ class DefaultToastView: ToastView {
     }()
     
     internal lazy var leadingImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .center
+        iv.clipsToBounds = true
+        iv.backgroundColor = .clear
+        return iv
+    }()
+    internal lazy var trailingImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .center
@@ -75,29 +83,42 @@ class DefaultToastView: ToastView {
         addSubview(containerView)
         containerView.addSubview(leadingImageView)
         containerView.addSubview(centerStackView)
-        
+        containerView.addSubview(trailingImageView)
+
         centerStackView.addArrangedSubviews(views: [titleLabel, messageLabel])
         
     }
     
-    internal func constraintLayout(){
+    internal func constraintLayout(heightView:Int = 50){
         
         containerView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(self.snp.topMargin).offset(16)
+            make.leading.trailing.equalToSuperview().offset(-2)
+            make.top.equalTo(self.snp.topMargin).offset(50)
+            make.height.width.equalTo(heightView)
             make.bottom.equalTo(self.snp.bottomMargin).offset(-16)
+            make.width.equalToSuperview().offset(4)
+
+
         }
         
         leadingImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
-            make.height.width.equalTo(30)
+            make.height.width.equalTo(20)
             make.centerY.equalTo(centerStackView.snp.centerY)
         }
         
         centerStackView.snp.makeConstraints { make in
             make.leading.equalTo(leadingImageView.snp.trailing).offset(16)
-            make.top.bottom.equalToSuperview().inset(8)
+            make.centerY.equalTo(containerView.snp.centerY)
+            //make.top.bottom.equalToSuperview().inset(8)
+        }
+        
+        trailingImageView.snp.makeConstraints { make in
+            make.leading.equalTo(centerStackView.snp.trailing).offset(16)
+            make.height.width.equalTo(40)
+            make.centerY.equalTo(centerStackView.snp.centerY)
             make.trailing.equalToSuperview().offset(-16)
+
         }
         
     }
@@ -132,6 +153,7 @@ extension DefaultToastView {
             // set the leading image and if no image is specified than set the default image for that type (success, warning, error, info)
             leadingImageView.image = builder.leadingIcon ?? UIImage.init(defaultImageOfType: type)
         }
+        trailingImageView.image = builder.trailingIcon
         
         titleLabel.textColor = builder.theme?.titleTextColor
         titleLabel.font = builder.theme?.titleFont
@@ -140,13 +162,24 @@ extension DefaultToastView {
         messageLabel.font = builder.theme?.messageFont
         
         leadingImageView.contentMode = .scaleAspectFit
-        
+        trailingImageView.contentMode = .scaleAspectFit
         containerView.backgroundColor = builder.theme?.backgroundColor
         
-        containerView.layer.cornerRadius = builder.theme?.toastCornerRadius ?? 8
+        if builder.showShadow ?? false
+        {
+            containerView.layer.shadowColor = UIColor.lightGray.cgColor
+            containerView.layer.shadowOpacity = 0.8 // Adjust for transparency
+            containerView.layer.shadowOffset = CGSize(width: 0, height: 0) // Direction of the shadow
+            containerView.layer.shadowRadius = 6 // Blurriness
+            containerView.layer.cornerRadius = builder.theme?.toastCornerRadius ?? 8
+        }
+        else
+        {
+            containerView.layer.cornerRadius = builder.theme?.toastCornerRadius ?? 8
+        }
         
         // finally constriant the layout
-        constraintLayout()
+        constraintLayout(heightView: builder.viewHeight ?? 50)
     }
     
 }
