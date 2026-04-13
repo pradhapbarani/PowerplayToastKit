@@ -2,15 +2,14 @@
 //  ToastBuilder.swift
 //  PowerplayToastKit
 //
-//  Created by Mithilesh Parmar on 18/10/21.
+//  Created by Barani Elangovan on 13/04/26.
 //
-
 import UIKit
 
 public class ToastBuilder: ToastBuildable {
     
     public var leadingIcon: UIImage?
-    
+    public var trailingIcon: UIImage?
     // timeinterval for toast to be shown on screen
     public var timeInterval: TimeInterval?
     
@@ -24,14 +23,28 @@ public class ToastBuilder: ToastBuildable {
     public var type: ToastType?
     
     private let defaultTimeInterval: TimeInterval = 2
-    
+
+    public var viewHeight: Int?
+    public var showShadow: Bool?
+
     public init() {}
     
     public func set(leadingIcon: UIImage?) -> ToastBuildable {
         self.leadingIcon = leadingIcon
         return self
     }
-    
+    public func set(trailingIcon: UIImage?) -> ToastBuildable {
+        self.trailingIcon = trailingIcon
+        return self
+    }
+    public func set(viewHeight: Int?) -> ToastBuildable {
+        self.viewHeight = viewHeight
+        return self
+    }
+    public func set(showShadow: Bool?) -> ToastBuildable {
+        self.showShadow = showShadow
+        return self
+    }
     public func set(type: ToastType?) -> ToastBuildable {
         self.type = type
         return self
@@ -58,7 +71,9 @@ public class ToastBuilder: ToastBuildable {
             .set(timeInterval: self.timeInterval ?? defaultTimeInterval)
             .set(type: self.type)
             .set(leadingIcon: self.leadingIcon)
-        
+            .set(trailingIcon: self.trailingIcon)
+            .set(viewHeight: self.viewHeight)
+            .set(showShadow: self.showShadow)
         if theme == nil {
             // if no theme is provided then get a default theme for specified type
             toastBuilder.set(theme: self.getToastTheme(for: type))
