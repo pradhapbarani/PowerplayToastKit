@@ -2,7 +2,7 @@
 //  ToastThemeBuilder.swift
 //  PowerplayToastKit
 //
-//  Created by Mithilesh Parmar on 18/10/21.
+//  Created by Barani Elangovan on 13/04/26.
 //
 
 import UIKit
@@ -58,8 +58,8 @@ public class ToastThemeBuilder: ToastThemeBuildable {
             .set(backgroundColor: self.backgroundColor)
             .set(titleFont: self.titleFont ?? UIFont.systemFont(ofSize: 16, weight: .bold))
             .set(messageFont: self.messageFont ?? UIFont.systemFont(ofSize: 14, weight: .medium))
-            .set(titleTextColor: self.titleTextColor ?? .black)
-            .set(messageTextColor: self.messageTextColor ?? .black)
+            .set(titleTextColor: self.titleTextColor ?? .white)
+            .set(messageTextColor: self.messageTextColor ?? .white)
             .set(toastCornerRadius: self.toastCornerRadius ?? 8)
         return themeBuilder
     }
